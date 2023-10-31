@@ -89,7 +89,7 @@ User Prompt: "
 """
 
 # Set the title of the Streamlit application
-st.title('ResearchGPT')
+st.title('AI Executive Order Chatbot')
 # Display a brief description of the application
 st.text('Ask questions related to the AI Executive Order"')
 
