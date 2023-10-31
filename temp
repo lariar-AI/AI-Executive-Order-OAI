@@ -1,0 +1,1 @@
+pip install langchain tiktoken openai faiss-cpu chromadb gpt_index==0.4.24

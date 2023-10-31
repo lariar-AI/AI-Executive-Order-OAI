@@ -1,0 +1,11 @@
+langchain
+streamlit
+openai
+tiktoken
+faiss-cpu
+gpt_index
+promptlayer
+pypdf 
+docx2txt 
+pdfplumber 
+python-dotenv
