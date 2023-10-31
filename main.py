@@ -36,7 +36,7 @@ SUMMARY_PROMPT = PromptTemplate(input_variables=["question","context"], template
 # Create a summarizer LLM, chain using ChatOpenAI
 llm = ChatOpenAI(
     temperature=0, 
-    model_name="gpt-3.5-turbo-16k",
+    model_name="gpt-4",
     callbacks=[PromptLayerCallbackHandler(pl_tags=["research-agent","summarize_docs"])]
 )
 
@@ -91,7 +91,7 @@ User Prompt: "
 # Set the title of the Streamlit application
 st.title('AI Executive Order Chatbot')
 # Display a brief description of the application
-st.text('Ask questions related to the AI Executive Order"')
+st.text('Ask questions related to the AI Executive Order')
 
 # Initialize an empty list to store chat history
 chat_history = []
@@ -110,8 +110,6 @@ if "messages" not in st.session_state:
 # Initialize a memory buffer to store the chat history
 memory = ConversationBufferMemory(memory_key="chat_history")
 
-# Prompt the user to enter a number
-prompt = st.chat_input("Enter a number")
 
 
 if prompt := st.chat_input('Ask a question about the AI Executive Order'):
