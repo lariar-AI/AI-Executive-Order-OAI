@@ -62,7 +62,15 @@ def intermediate_steps(query: str) -> str:
     return doc_summary.run({"question": prompt, "chat_history": chat_history})
 
 # Load tools
-tools = [intermediate_steps]
+#tools = [intermediate_steps]
+
+tools = [
+    Tool(
+        name="Intermediate Answer",
+        func=intermediate_steps,
+        description="useful for when you need to ask with search",
+    )
+        ]
 
 # Initialize agent with tools, agentllm, and memory
 msgs = StreamlitChatMessageHistory(key="chat_history")
