@@ -4,6 +4,7 @@ from langchain.document_loaders.csv_loader import CSVLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma, FAISS
 from langchain.embeddings import OpenAIEmbeddings
+from langchain.document_loaders import UnstructuredXMLLoader
 import os
 
 from dotenv import load_dotenv
@@ -17,6 +18,10 @@ promptlayer_api_key = os.getenv('PROMPTLAYER_API_KEY')
 # Load documents from the 'docs' directory
 documents = []
 for file in os.listdir("docs"):
+    if file.endswith(".xml"):
+        xml_path = "./docs/" + file
+        loader = UnstructuredXMLLoader(xml_path)
+        documents.extend(loader.load())
     if file.endswith(".pdf"):
         pdf_path = "./docs/" + file
         loader = PDFPlumberLoader(pdf_path)
