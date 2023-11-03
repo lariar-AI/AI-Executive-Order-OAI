@@ -62,8 +62,9 @@ def intermediate_steps(query: str) -> str:
     return doc_summary.run({"question": prompt, "chat_history": chat_history})
 
 # Load tools
-#tools = [intermediate_steps]
+tools = [intermediate_steps]
 
+"""
 tools = [
     Tool(
         name="Intermediate Answer",
@@ -71,6 +72,7 @@ tools = [
         description="useful for when you need to ask with search",
     )
         ]
+"""
 
 # Initialize agent with tools, agentllm, and memory
 msgs = StreamlitChatMessageHistory(key="chat_history")
@@ -79,7 +81,7 @@ memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs)
 agent = initialize_agent(
     tools, 
     agentllm, 
-    agent=AgentType.SELF_ASK_WITH_SEARCH, # "chat-zero-shot-react-description", 
+    agent="chat-zero-shot-react-description", # AgentType.SELF_ASK_WITH_SEARCH, # 
     memory=memory,
     handle_parsing_errors=True
 )  
