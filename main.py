@@ -80,7 +80,8 @@ agent = initialize_agent(
     tools, 
     agentllm, 
     agent=AgentType.SELF_ASK_WITH_SEARCH, # "chat-zero-shot-react-description", 
-    memory=memory
+    memory=memory,
+    handle_parsing_errors=True
 )  
 
 # Define agent instructions
