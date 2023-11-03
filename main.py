@@ -12,7 +12,9 @@ import promptlayer  # Don't forget this 🍰
 from langchain.callbacks import PromptLayerCallbackHandler
 import streamlit as st
 from langchain.memory import StreamlitChatMessageHistory
+from langchain.document_loaders import UnstructuredXMLLoader
 from load_documents import vectordb
+
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
