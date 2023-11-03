@@ -57,12 +57,12 @@ agentllm = ChatOpenAI(
 
 # Create tool for accessing the summary LLM
 @tool
-def intermediate_steps(query: str) -> str:
+def search_EO(query: str) -> str:
     """Searches the AI Executive Order for a relevant answer to the user's question."""
     return doc_summary.run({"question": prompt, "chat_history": chat_history})
 
 # Load tools
-tools = [intermediate_steps]
+tools = [search_EO]
 
 """
 tools = [
