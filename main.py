@@ -57,12 +57,12 @@ agentllm = ChatOpenAI(
 
 # Create tool for accessing the summary LLM
 @tool
-def research_docs(query: str) -> str:
+def intermediate_steps(query: str) -> str:
     """Searches the AI Executive Order for a relevant answer to the user's question."""
     return doc_summary.run({"question": prompt, "chat_history": chat_history})
 
 # Load tools
-tools = [research_docs]
+tools = [intermediate_steps]
 
 # Initialize agent with tools, agentllm, and memory
 msgs = StreamlitChatMessageHistory(key="chat_history")
@@ -71,7 +71,7 @@ memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs)
 agent = initialize_agent(
     tools, 
     agentllm, 
-    agent="chat-zero-shot-react-description", 
+    agent="SELF_ASK_WITH_SEARCH", # "chat-zero-shot-react-description", 
     memory=memory
 )  
 
