@@ -9,3 +9,4 @@ pypdf
 docx2txt 
 pdfplumber 
 python-dotenv
+unstructured 
