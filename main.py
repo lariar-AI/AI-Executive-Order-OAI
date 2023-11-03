@@ -71,7 +71,7 @@ memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs)
 agent = initialize_agent(
     tools, 
     agentllm, 
-    agent="SELF_ASK_WITH_SEARCH", # "chat-zero-shot-react-description", 
+    agent=AgentType.SELF_ASK_WITH_SEARCH, # "chat-zero-shot-react-description", 
     memory=memory
 )  
 
