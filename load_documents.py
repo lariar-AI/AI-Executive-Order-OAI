@@ -44,7 +44,7 @@ text_splitter = CharacterTextSplitter(
    chunk_size=500, 
    chunk_overlap=0
 )
-documents = text_splitter.split_documents(documents)
+# documents = text_splitter.split_documents(documents)
 
 # Create the vectorstore using FAISS
 vectordb = FAISS.from_documents(documents, embedding=OpenAIEmbeddings())
