@@ -47,7 +47,7 @@ doc_summary = ConversationalRetrievalChain.from_llm(
     vectordb.as_retriever(),
     condense_question_prompt=SUMMARY_PROMPT,
     return_intermediate_steps=True,
-    chain_type="Map reduce"
+    chain_type="map_reduce"
 )
 
 # Create the agent LLM using ChatOpenAI
