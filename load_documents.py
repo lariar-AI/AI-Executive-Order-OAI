@@ -41,10 +41,15 @@ for file in os.listdir("docs"):
 
 # Process and chunk up the text using CharacterTextSplitter
 text_splitter = CharacterTextSplitter(
+   separator="\n\n",
    chunk_size=500, 
-   chunk_overlap=0
+   chunk_overlap=20
 )
-# documents = text_splitter.split_documents(documents)
+
+
+
+
+documents = text_splitter.split_documents(documents)
 
 # Create the vectorstore using FAISS
 vectordb = FAISS.from_documents(documents, embedding=OpenAIEmbeddings())
