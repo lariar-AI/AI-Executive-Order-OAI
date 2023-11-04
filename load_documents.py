@@ -42,11 +42,9 @@ for file in os.listdir("docs"):
 # Process and chunk up the text using CharacterTextSplitter
 text_splitter = CharacterTextSplitter(
    separator="\n\n",
-   chunk_size=500, 
-   chunk_overlap=20
+   min_length=256,
+   overlap=0
 )
-
-
 
 
 documents = text_splitter.split_documents(documents)
