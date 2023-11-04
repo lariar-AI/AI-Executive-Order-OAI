@@ -5,6 +5,8 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma, FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.document_loaders import UnstructuredXMLLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
 import os
 
 from dotenv import load_dotenv
