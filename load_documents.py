@@ -42,8 +42,8 @@ for file in os.listdir("docs"):
 # Process and chunk up the text using CharacterTextSplitter
 text_splitter = CharacterTextSplitter(
    separator="\n\n",
-   min_length=256,
-   overlap=0
+   chunk_size = 500,
+   chunk_overlap  = 0
 )
 
 
