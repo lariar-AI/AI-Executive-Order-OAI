@@ -40,8 +40,7 @@ for file in os.listdir("docs"):
         documents.extend(loader.load())
 
 # Process and chunk up the text using CharacterTextSplitter
-text_splitter = CharacterTextSplitter(
-   separator="\n\n",
+text_splitter = RecursiveCharacterTextSplitter(
    chunk_size = 500,
    chunk_overlap  = 0
 )
