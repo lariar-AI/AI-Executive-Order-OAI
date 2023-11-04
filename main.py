@@ -44,7 +44,7 @@ llm = ChatOpenAI(
 
 doc_summary = ConversationalRetrievalChain.from_llm(
     llm,
-    vectordb.as_retriever(search_kwargs={'score_threshold': 0.8}),
+    vectordb.as_retriever(search_kwargs={'score_threshold': 0.5}),
     condense_question_prompt=SUMMARY_PROMPT,
     chain_type="stuff"
 )
