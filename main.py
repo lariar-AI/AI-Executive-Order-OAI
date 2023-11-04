@@ -46,7 +46,7 @@ doc_summary = ConversationalRetrievalChain.from_llm(
     llm,
     vectordb.as_retriever(search_kwargs={'score_threshold': 0.5}),
     condense_question_prompt=SUMMARY_PROMPT,
-    chain_type="map_reduce"
+    chain_type="map_rerank"
 )
 
 # Create the agent LLM using ChatOpenAI
@@ -66,15 +66,7 @@ def search_EO(query: str) -> str:
 # Load tools
 tools = [search_EO]
 
-"""
-tools = [
-    Tool(
-        name="Intermediate Answer",
-        func=intermediate_steps,
-        description="useful for when you need to ask with search",
-    )
-        ]
-"""
+
 
 # Initialize agent with tools, agentllm, and memory
 msgs = StreamlitChatMessageHistory(key="chat_history")
