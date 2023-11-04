@@ -46,7 +46,6 @@ doc_summary = ConversationalRetrievalChain.from_llm(
     llm,
     vectordb.as_retriever(),
     condense_question_prompt=SUMMARY_PROMPT,
-    return_intermediate_steps=True,
     chain_type="map_reduce"
 )
 
