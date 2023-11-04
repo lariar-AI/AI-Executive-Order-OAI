@@ -43,7 +43,7 @@ for file in os.listdir("docs"):
 
 # Process and chunk up the text using CharacterTextSplitter
 text_splitter = RecursiveCharacterTextSplitter(
-   chunk_size = 500,
+   chunk_size = 1000,
    chunk_overlap  = 0
 )
 
