@@ -10,4 +10,4 @@ docx2txt
 pdfplumber 
 python-dotenv
 unstructured 
-pydantic==1.10
+pydantic==1.10.10
