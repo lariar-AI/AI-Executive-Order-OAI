@@ -1,6 +1,6 @@
 langchain
 streamlit
-openai
+openai==0.28.1
 tiktoken
 faiss-cpu
 gpt_index
