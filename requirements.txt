@@ -1,12 +1,3 @@
-langchain
 streamlit
-openai==0.28.1
-tiktoken
-faiss-cpu
-gpt_index
-promptlayer
-pypdf 
-docx2txt 
-pdfplumber 
+openai
 python-dotenv
-unstructured
