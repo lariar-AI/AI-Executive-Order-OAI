@@ -34,7 +34,7 @@ def slow_echo(usr_message, history):
   #--run the query on the assistant's thread
   run = client.beta.threads.runs.create(
     thread_id=chat_thread.id,
-    assistant_id=my_assistant.id,
+    assistant_id="asst_rKR4Ere5pU3Wcxh0TCE3imgk",
     instructions="Please be polite when you answer the queries."
   )
 
