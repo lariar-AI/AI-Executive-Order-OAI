@@ -61,3 +61,4 @@ handle_run_status()
 
 if prompt := st.chat_input('Ask a question about the AI Executive Order'):
     display_message("user",prompt,1)
+    st.session_state.run.status = "go"
