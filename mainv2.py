@@ -1,3 +1,4 @@
+# https://github.com/Doomcow500/StreamlitAI/blob/main/main.py
 import streamlit as st
 import openai
 import uuid
@@ -56,3 +57,4 @@ def display_message(role, message, delay):
 initialize_session_state()
 initialize_assistant()
 handle_run_status()
+display_message()
