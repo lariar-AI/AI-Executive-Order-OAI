@@ -1,97 +1,85 @@
 import sys
 import os
-from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-from langchain.prompts import PromptTemplate
-from langchain.callbacks import StreamlitCallbackHandler
-from langchain.agents import AgentType, initialize_agent, load_tools
-from langchain.agents import Tool, tool
-import promptlayer  # Don't forget this 🍰
-from langchain.callbacks import PromptLayerCallbackHandler
-import streamlit as st
-from langchain.memory import StreamlitChatMessageHistory
-from langchain.document_loaders import UnstructuredXMLLoader
-from load_documents import vectordb
 
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
 
-openai_api_key = os.getenv('OPENAI_API_KEY')
-promptlayer_api_key = os.getenv('PROMPTLAYER_API_KEY')
+import time
 
 
-# Create summary prompt
-sum_prompt = """
-Summarize the following content, paying close attention to the details that may answer this user's question. 
----
-Question: {question}
----
-Context: {context}
----
-Summary: """
-
-SUMMARY_PROMPT = PromptTemplate(input_variables=["question","context"], template=sum_prompt)
-
-# Create a summarizer LLM, chain using ChatOpenAI
-llm = ChatOpenAI(
-    temperature=0, 
-    model_name="gpt-4",
-    callbacks=[PromptLayerCallbackHandler(pl_tags=["research-agent","summarize_docs"])]
-)
-
-doc_summary = ConversationalRetrievalChain.from_llm(
-    llm,
-    vectordb.as_retriever(search_type="mmr", search_kwargs={'score_threshold': 0.4, 'k':10}),
-    condense_question_prompt=SUMMARY_PROMPT,
-    chain_type="stuff"
-)
-
-# Create the agent LLM using ChatOpenAI
-agentllm = ChatOpenAI(
-   temperature=0, 
-   model='gpt-4', 
-   streaming=True,
-   callbacks=[PromptLayerCallbackHandler(pl_tags=["research-agent","top-level"])]
-)
-
-# Create tool for accessing the summary LLM
-@tool
-def search_EO(query: str) -> str:
-    """Searches the AI Executive Order for a relevant answer to the user's question."""
-    return doc_summary.run({"question": prompt, "chat_history": chat_history})
-
-# Load tools
-tools = [search_EO]
+from openai import OpenAI
+client = OpenAI()
 
 
+#--------------------------------------
+# #Creating a global thread object
+#--------------------------------------
+chat_thread = client.beta.threads.create()
 
-# Initialize agent with tools, agentllm, and memory
-msgs = StreamlitChatMessageHistory(key="chat_history")
-memory = ConversationBufferMemory(memory_key="history", chat_memory=msgs)
+#--------------------------------------
+#Gradio callback after user enters text
+#--------------------------------------
+def slow_echo(usr_message, history):
+  print(f"[Debug] -> User query is [{usr_message}]\n")
 
-agent = initialize_agent(
-    tools, 
-    agentllm, 
-    agent="chat-zero-shot-react-description", # AgentType.SELF_ASK_WITH_SEARCH, # 
-    memory=memory,
-    handle_parsing_errors=True
-)  
+  #--create a message based on user's query
+  msg = client.beta.threads.messages.create(
+    thread_id=chat_thread.id,
+    role="user",
+    content=usr_message
+  )
+  print(f"[Debug] -> Sent message to assistant ...\n")  
 
-# Define agent instructions
-instructions = """
-System Prompt: You are a Consulting Services AI assistant who has access to the new Executive Order on AI that is a topic of interest to the user. You will use available tools to search the text of the Executive Order to help answer questions. 
+  #--run the query on the assistant's thread
+  run = client.beta.threads.runs.create(
+    thread_id=chat_thread.id,
+    assistant_id=my_assistant.id,
+    instructions="Please be polite when you answer the queries."
+  )
 
-Follow these rules:
-- Always use a tool. 
-- It is OK to make multiple calls to this tool. 
-- Break up complex questions into separate simple searches. 
-- Always cite your sources.
-----
-User Prompt: "
+  #--wait for the completion and post it back on the chat messages
+  while run.status != 'completed' and run.status != 'failed' :
+    print(f"Waiting for run to complete. Current status is {run.status}\n")
+    run = client.beta.threads.runs.retrieve(
+            thread_id=chat_thread.id,
+            run_id=run.id
+    )
+    time.sleep(1)
+
+  #--store the current run to match it with the right response from the thread
+  current_run = run.id
+
+  messages = client.beta.threads.messages.list(
+    thread_id=chat_thread.id
+  )
+
+  #--- look for the specific response to a run_id
+  #--- have requested this as an enhancement to openai
+  #--- https://community.openai.com/t/assistant-api-sdk-enhancement-get-message-by-run-id/484468
+  for message in messages.data:
+    if message.role == 'assistant' and message.run_id == current_run:
+        response = message.content[0].text.value
+        yield response
+
 """
+demo = gr.ChatInterface(slow_echo,
+                        title="AI Math Tutor",
+                        description="AI Math Tutor is a virtual learning assistant that provides personalized math instruction, explanations, and practice problems to help you improve your math skills.",
+                        theme="soft",
+                        examples=["What is the square root of 256", "Explain BODMAS rule?", "25th Fibonacci number?"],
+                        retry_btn=None,
+                        undo_btn=None,
+                        clear_btn=None).queue()
+
+if __name__ == "__main__":
+    demo.launch()
+"""       
+
+
+
+
+### Streamlit
 
 # Set the title of the Streamlit application
 st.title('AI Executive Order Chatbot')
@@ -121,7 +109,7 @@ if prompt := st.chat_input('Ask a question about the AI Executive Order'):
     st.chat_message("user").write(prompt)
     with st.chat_message("assistant"):
         st_callback = StreamlitCallbackHandler(st.container())
-        response = agent.run(instructions+prompt, callbacks=[st_callback])
+        response = slow_echo(prompt,st_callback)
         st.write(response)
 
 if st.button("Clear Chat"):
