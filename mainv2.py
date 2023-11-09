@@ -57,4 +57,4 @@ def display_message(role, message, delay):
 initialize_session_state()
 initialize_assistant()
 handle_run_status()
-display_message()
+display_message("user","test",1)
