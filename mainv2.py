@@ -57,4 +57,7 @@ def display_message(role, message, delay):
 initialize_session_state()
 initialize_assistant()
 handle_run_status()
-display_message("user","test",1)
+
+
+if prompt := st.chat_input('Ask a question about the AI Executive Order'):
+    display_message("user",prompt,1)
